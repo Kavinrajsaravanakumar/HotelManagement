@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@vapi-ai/web": "^2.5.2",
+    "styled-components": "^6.1.19"
+  }
+}
