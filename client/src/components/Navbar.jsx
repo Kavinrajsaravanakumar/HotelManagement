@@ -3,7 +3,6 @@ import { assets } from "../assets/assets";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useClerk, useUser, UserButton } from "@clerk/clerk-react";
 
-
 const BookIcon = () => (
   <svg
     className="w-4 h-4 text-black-700"
@@ -28,7 +27,7 @@ const Navbar = () => {
   const navLinks = [
     { name: "Home", path: "/" },
     { name: "Hotels", path: "/rooms" },
-    { name: "Experience", path: "/" },
+    { name: "Experience", path: "/experience" },
     { name: "About", path: "/" },
   ];
 
@@ -83,8 +82,16 @@ const Navbar = () => {
     const newInfo = {};
 
     const wordToNumber = {
-      one: 1, two: 2, three: 3, four: 4, five: 5,
-      six: 6, seven: 7, eight: 8, nine: 9, ten: 10
+      one: 1,
+      two: 2,
+      three: 3,
+      four: 4,
+      five: 5,
+      six: 6,
+      seven: 7,
+      eight: 8,
+      nine: 9,
+      ten: 10,
     };
 
     const parseNumber = (match) => {
@@ -115,7 +122,9 @@ const Navbar = () => {
     }
 
     // Extract number of rooms
-    const roomsMatch = lowerText.match(/(\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s*room/);
+    const roomsMatch = lowerText.match(
+      /(\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s*room/,
+    );
     const roomsVal = parseNumber(roomsMatch);
     if (roomsVal) {
       newInfo.numberOfRooms = roomsVal.toString();
@@ -125,7 +134,9 @@ const Navbar = () => {
     }
 
     // Extract number of adults
-    const adultsMatch = lowerText.match(/(\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s*adult/);
+    const adultsMatch = lowerText.match(
+      /(\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s*adult/,
+    );
     const adultsVal = parseNumber(adultsMatch);
     if (adultsVal) {
       newInfo.adults = adultsVal.toString();
@@ -135,7 +146,9 @@ const Navbar = () => {
     }
 
     // Extract number of children
-    const childrenMatch = lowerText.match(/(\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s*(child|kid)/);
+    const childrenMatch = lowerText.match(
+      /(\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s*(child|kid)/,
+    );
     const childrenVal = parseNumber(childrenMatch);
     if (childrenVal) {
       newInfo.children = childrenVal.toString();
@@ -190,9 +203,12 @@ const Navbar = () => {
   };
 
   const startListening = () => {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) {
-      alert("Your browser does not support Voice Search. Please use Chrome or Edge.");
+      alert(
+        "Your browser does not support Voice Search. Please use Chrome or Edge.",
+      );
       return;
     }
 
@@ -211,15 +227,15 @@ const Navbar = () => {
 
       recognition.continuous = true;
       recognition.interimResults = true;
-      recognition.lang = 'en-US';
+      recognition.lang = "en-US";
 
       recognition.onstart = () => {
         console.log("Voice recognition started");
       };
 
       recognition.onresult = (event) => {
-        let interimTranscript = '';
-        let finalTranscriptChunk = '';
+        let interimTranscript = "";
+        let finalTranscriptChunk = "";
 
         for (let i = event.resultIndex; i < event.results.length; ++i) {
           if (event.results[i].isFinal) {
@@ -240,7 +256,7 @@ const Navbar = () => {
 
       recognition.onerror = (event) => {
         console.error("Speech recognition error", event.error);
-        if (event.error === 'not-allowed') {
+        if (event.error === "not-allowed") {
           alert("Please allow microphone access to use voice search.");
           stopListening();
         }
@@ -251,7 +267,6 @@ const Navbar = () => {
       };
 
       recognition.start();
-
     } catch (error) {
       console.error("Failed to start recording:", error);
       setTranscript("Failed to access microphone. Please allow permissions.");
@@ -271,8 +286,16 @@ const Navbar = () => {
 
     // Finalize Transcript and Update UI
     setTimeout(() => {
-      const currentSessionText = (finalTranscriptRef.current + " " + tempTranscriptRef.current).trim();
-      const fullText = (previousTranscriptRef.current + " " + currentSessionText).trim();
+      const currentSessionText = (
+        finalTranscriptRef.current +
+        " " +
+        tempTranscriptRef.current
+      ).trim();
+      const fullText = (
+        previousTranscriptRef.current +
+        " " +
+        currentSessionText
+      ).trim();
 
       setTranscript(fullText);
 
@@ -300,10 +323,11 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed top-0 left-0  w-full flex items-center justify-between px-4 md:px-16 lg:px-24 xl:px-32 transition-all duration-500 z-50 ${isScrolled
-        ? "bg-white/80 shadow-md text-gray-700 backdrop-blur-lg py-3 md:py-4"
-        : "py-4 md:py-6"
-        }`}
+      className={`fixed top-0 left-0  w-full flex items-center justify-between px-4 md:px-16 lg:px-24 xl:px-32 transition-all duration-500 z-50 ${
+        isScrolled
+          ? "bg-white/80 shadow-md text-gray-700 backdrop-blur-lg py-3 md:py-4"
+          : "py-4 md:py-6"
+      }`}
     >
       {/* Logo */}
       <Link to="/">
@@ -320,44 +344,49 @@ const Navbar = () => {
           <a
             key={i}
             href={link.path}
-            className={`group flex flex-col gap-0.5 ${isScrolled ? "text-gray-700" : "text-white"
-              }`}
+            className={`group flex flex-col gap-0.5 ${
+              isScrolled ? "text-gray-700" : "text-white"
+            }`}
           >
             {link.name}
             <div
-              className={`${isScrolled ? "bg-gray-700" : "bg-white"
-                } h-0.5 w-0 group-hover:w-full transition-all duration-300`}
+              className={`${
+                isScrolled ? "bg-gray-700" : "bg-white"
+              } h-0.5 w-0 group-hover:w-full transition-all duration-300`}
             />
           </a>
         ))}
         <button
-          className={`border px-4 py-1 text-sm font-light rounded-full cursor-pointer ${isScrolled ? "text-black" : "text-white"
-            } transition-all`}
+          className={`border px-4 py-1 text-sm font-light rounded-full cursor-pointer ${
+            isScrolled ? "text-black" : "text-white"
+          } transition-all`}
           onClick={() => navigate("/owner")}
         >
           Dashboard
         </button>
       </div>
-
       {/* Desktop Right */}
       <div className="hidden md:flex items-center gap-4">
         <img
           src={assets.searchIcon}
           alt="search"
-          className={`h-7 transition-all duration-500 ${isScrolled ? "hover:bg-gray-200" : "hover:bg-white/20"
-            }`}
+          className={`h-7 transition-all duration-500 ${
+            isScrolled ? "hover:bg-gray-200" : "hover:bg-white/20"
+          }`}
         />
 
         {/* Mic Button */}
         <button
           onClick={startListening}
-          className={`p-2 rounded-full transition-all duration-300 hover:scale-110 ${isScrolled ? "hover:bg-gray-200" : "hover:bg-white/20"
-            }`}
+          className={`p-2 rounded-full transition-all duration-300 hover:scale-110 ${
+            isScrolled ? "hover:bg-gray-200" : "hover:bg-white/20"
+          }`}
           title="Voice Search"
         >
           <svg
-            className={`w-6 h-6 transition-all duration-500 ${isScrolled ? "text-gray-700" : "text-white"
-              }`}
+            className={`w-6 h-6 transition-all duration-500 ${
+              isScrolled ? "text-gray-700" : "text-white"
+            }`}
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -384,8 +413,9 @@ const Navbar = () => {
         ) : (
           <button
             onClick={openSignIn}
-            className={`px-8 py-2.5 rounded-full ml-4 transition-all duration-500 ${isScrolled ? "text-white bg-black" : "bg-white text-black"
-              }`}
+            className={`px-8 py-2.5 rounded-full ml-4 transition-all duration-500 ${
+              isScrolled ? "text-white bg-black" : "bg-white text-black"
+            }`}
           >
             Login
           </button>
@@ -416,8 +446,9 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       <div
-        className={`fixed top-0 left-0 w-full h-screen bg-white text-base flex flex-col md:hidden items-center justify-center gap-6 font-medium text-gray-800 transition-all duration-500 ${isMenuOpen ? "translate-x-0" : "-translate-x-full"
-          }`}
+        className={`fixed top-0 left-0 w-full h-screen bg-white text-base flex flex-col md:hidden items-center justify-center gap-6 font-medium text-gray-800 transition-all duration-500 ${
+          isMenuOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
       >
         <button
           className="absolute top-4 right-4"
@@ -492,12 +523,13 @@ const Navbar = () => {
                   <button
                     onClick={toggleListening}
                     disabled={isProcessing}
-                    className={`p-6 rounded-full transition-all duration-300 ${isProcessing
-                      ? "bg-yellow-500 cursor-wait"
-                      : isListening
-                        ? "bg-red-500 animate-pulse shadow-lg shadow-red-500/50"
-                        : "bg-gradient-to-r from-blue-500 to-purple-600 hover:scale-105"
-                      }`}
+                    className={`p-6 rounded-full transition-all duration-300 ${
+                      isProcessing
+                        ? "bg-yellow-500 cursor-wait"
+                        : isListening
+                          ? "bg-red-500 animate-pulse shadow-lg shadow-red-500/50"
+                          : "bg-gradient-to-r from-blue-500 to-purple-600 hover:scale-105"
+                    }`}
                   >
                     {isProcessing ? (
                       <svg
@@ -540,20 +572,22 @@ const Navbar = () => {
                 {/* Status */}
                 <div className="text-center mb-4">
                   <span
-                    className={`inline-flex items-center px-3 py-1 rounded-full text-sm ${isProcessing
-                      ? "bg-yellow-100 text-yellow-700"
-                      : isListening
-                        ? "bg-green-100 text-green-700"
-                        : "bg-gray-100 text-gray-600"
-                      }`}
+                    className={`inline-flex items-center px-3 py-1 rounded-full text-sm ${
+                      isProcessing
+                        ? "bg-yellow-100 text-yellow-700"
+                        : isListening
+                          ? "bg-green-100 text-green-700"
+                          : "bg-gray-100 text-gray-600"
+                    }`}
                   >
                     <span
-                      className={`w-2 h-2 rounded-full mr-2 ${isProcessing
-                        ? "bg-yellow-500 animate-pulse"
-                        : isListening
-                          ? "bg-green-500 animate-pulse"
-                          : "bg-gray-400"
-                        }`}
+                      className={`w-2 h-2 rounded-full mr-2 ${
+                        isProcessing
+                          ? "bg-yellow-500 animate-pulse"
+                          : isListening
+                            ? "bg-green-500 animate-pulse"
+                            : "bg-gray-400"
+                      }`}
                     ></span>
                     {isProcessing
                       ? "Processing..."
@@ -591,11 +625,18 @@ const Navbar = () => {
                 <div className="grid grid-cols-1 gap-5">
                   {/* Room Type */}
                   <div>
-                    <label className="text-xs text-gray-400 block mb-1">Room Type</label>
+                    <label className="text-xs text-gray-400 block mb-1">
+                      Room Type
+                    </label>
                     <input
                       type="text"
                       value={extractedInfo.roomType}
-                      onChange={(e) => setExtractedInfo({ ...extractedInfo, roomType: e.target.value })}
+                      onChange={(e) =>
+                        setExtractedInfo({
+                          ...extractedInfo,
+                          roomType: e.target.value,
+                        })
+                      }
                       placeholder="e.g. Deluxe"
                       className="w-full bg-gray-50 border-b border-gray-300 focus:border-blue-500 outline-none py-1 text-gray-700 font-medium transition-colors"
                     />
@@ -604,24 +645,38 @@ const Navbar = () => {
                   <div className="grid grid-cols-2 gap-4">
                     {/* Number of Rooms */}
                     <div>
-                      <label className="text-xs text-gray-400 block mb-1">No. of Rooms</label>
+                      <label className="text-xs text-gray-400 block mb-1">
+                        No. of Rooms
+                      </label>
                       <input
                         type="number"
                         min="1"
                         value={extractedInfo.numberOfRooms}
-                        onChange={(e) => setExtractedInfo({ ...extractedInfo, numberOfRooms: e.target.value })}
+                        onChange={(e) =>
+                          setExtractedInfo({
+                            ...extractedInfo,
+                            numberOfRooms: e.target.value,
+                          })
+                        }
                         className="w-full bg-gray-50 border-b border-gray-300 focus:border-blue-500 outline-none py-1 text-gray-700 font-medium transition-colors"
                       />
                     </div>
 
                     {/* Adults */}
                     <div>
-                      <label className="text-xs text-gray-400 block mb-1">No. of Adults</label>
+                      <label className="text-xs text-gray-400 block mb-1">
+                        No. of Adults
+                      </label>
                       <input
                         type="number"
                         min="1"
                         value={extractedInfo.adults}
-                        onChange={(e) => setExtractedInfo({ ...extractedInfo, adults: e.target.value })}
+                        onChange={(e) =>
+                          setExtractedInfo({
+                            ...extractedInfo,
+                            adults: e.target.value,
+                          })
+                        }
                         className="w-full bg-gray-50 border-b border-gray-300 focus:border-blue-500 outline-none py-1 text-gray-700 font-medium transition-colors"
                       />
                     </div>
@@ -630,23 +685,37 @@ const Navbar = () => {
                   <div className="grid grid-cols-2 gap-4">
                     {/* Children */}
                     <div>
-                      <label className="text-xs text-gray-400 block mb-1">No. of Children</label>
+                      <label className="text-xs text-gray-400 block mb-1">
+                        No. of Children
+                      </label>
                       <input
                         type="number"
                         min="0"
                         value={extractedInfo.children}
-                        onChange={(e) => setExtractedInfo({ ...extractedInfo, children: e.target.value })}
+                        onChange={(e) =>
+                          setExtractedInfo({
+                            ...extractedInfo,
+                            children: e.target.value,
+                          })
+                        }
                         className="w-full bg-gray-50 border-b border-gray-300 focus:border-blue-500 outline-none py-1 text-gray-700 font-medium transition-colors"
                       />
                     </div>
 
                     {/* Location */}
                     <div>
-                      <label className="text-xs text-gray-400 block mb-1">Location</label>
+                      <label className="text-xs text-gray-400 block mb-1">
+                        Location
+                      </label>
                       <input
                         type="text"
                         value={extractedInfo.location}
-                        onChange={(e) => setExtractedInfo({ ...extractedInfo, location: e.target.value })}
+                        onChange={(e) =>
+                          setExtractedInfo({
+                            ...extractedInfo,
+                            location: e.target.value,
+                          })
+                        }
                         placeholder="e.g. Mumbai"
                         className="w-full bg-gray-50 border-b border-gray-300 focus:border-blue-500 outline-none py-1 text-gray-700 font-medium transition-colors"
                       />
@@ -655,11 +724,18 @@ const Navbar = () => {
 
                   {/* Date (Check-in) */}
                   <div>
-                    <label className="text-xs text-gray-400 block mb-1">Date</label>
+                    <label className="text-xs text-gray-400 block mb-1">
+                      Date
+                    </label>
                     <input
                       type="text"
                       value={extractedInfo.checkIn}
-                      onChange={(e) => setExtractedInfo({ ...extractedInfo, checkIn: e.target.value })}
+                      onChange={(e) =>
+                        setExtractedInfo({
+                          ...extractedInfo,
+                          checkIn: e.target.value,
+                        })
+                      }
                       placeholder="e.g. Tomorrow"
                       className="w-full bg-gray-50 border-b border-gray-300 focus:border-blue-500 outline-none py-1 text-gray-700 font-medium transition-colors"
                     />
@@ -711,10 +787,11 @@ const Navbar = () => {
                   }
                 }}
                 disabled={!transcript}
-                className={`px-8 py-3 rounded-full font-semibold transition-all duration-300 flex items-center gap-2 ${transcript
-                  ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:scale-105 shadow-lg"
-                  : "bg-gray-200 text-gray-400 cursor-not-allowed"
-                  }`}
+                className={`px-8 py-3 rounded-full font-semibold transition-all duration-300 flex items-center gap-2 ${
+                  transcript
+                    ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:scale-105 shadow-lg"
+                    : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                }`}
               >
                 <svg
                   className="w-5 h-5"
